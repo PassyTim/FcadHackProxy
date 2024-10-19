@@ -1,0 +1,6 @@
+@FcadHackProxy_HostAddress = http://localhost:8080
+
+GET {{FcadHackProxy_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
