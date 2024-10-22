@@ -2,14 +2,15 @@
 
 public class FilterSettings
 {
-    public string MaskingSymbol { get; set; } = "***";
+    public string MaskingSymbols { get; set; } = "***";
+    public bool RemoveSensitiveFields { get; set; } = false;
+    public bool BlockSensitiveMessages { get; set; } = false;
+    public bool MaskSensitiveMessages { get; set; } = true;
+    public bool SaveSensitiveEmail { get; set; } = false;
+    public List<string> AdditionalRegexPatterns { get; set; } = new();
 
-    public bool RemoveSensitiveFields { get; set; } = true;
-    public bool BlockSensitiveMessages { get; set; }
-    public bool MaskSensitiveMessages { get; set; } = false;
-
-    public List<string> RegexPatterns { get; set; } = new List<string>()
-    {
+    private List<string> DefaultRegexPatterns { get; set; } =
+    [
         @"(?i)\bлогин\s*[:= ]\s*([^\s]+)",
         @"(?i)\bпароль\s*[:= ]\s*([^\s]+)",
         @"\b(\d{4})\s(\d{6})\b",
@@ -35,5 +36,14 @@ public class FilterSettings
         @"(?i)\bучебное\s+заведение\s*[:= ]\s*(.+)",
         @"(?i)\bсерия/номер\s+диплома\s*[:= ]\s*(.+)",
         @"(?i)\bрегистрационный\s+номер\s*[:= ]\s*([^=\n]+)"
-    };
+    ];
+    
+    public List<string> GetAllRegexPatterns()
+    {
+        var additionalPatterns = AdditionalRegexPatterns
+            .Select(p => p.Split(':').Last())
+            .ToList();
+        
+        return DefaultRegexPatterns.Concat(additionalPatterns).ToList();
+    }
 }

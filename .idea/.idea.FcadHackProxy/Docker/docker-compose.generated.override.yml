@@ -1,0 +1,21 @@
+# This is a generated file. Not intended for manual editing.
+services:
+  fcadhackproxy:
+    build:
+      context: "C:\\Projects\\FcadHackProxy"
+      dockerfile: "FcadHackProxy/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net8.0/FcadHackProxy.dll"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "fcadhackproxy:dev"
+    ports: []
+    volumes:
+    - "C:\\Users\\User\\.nuget\\packages:/home/app/.nuget/packages"
+    - "C:\\Projects\\FcadHackProxy\\FcadHackProxy:/app:rw"
+    - "C:\\Projects\\FcadHackProxy:/src:rw"
+    working_dir: "/app"

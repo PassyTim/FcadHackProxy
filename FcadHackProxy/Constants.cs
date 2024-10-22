@@ -5,14 +5,16 @@ public static class Constants
     public static readonly List<string> PersonalDataFields = [
         "Имя", 
         "Пароль", 
-        "Login", 
         "Логин", 
         "Номер телефона",
         "Дата рождения",
         "Фамилия",
         "Пол",
-        "Email",
         "Возраст",
         "Отчество",
+        "Password",
+        "Name",
+        "Phone number",
+        "PhoneNumber"
     ];
 }
