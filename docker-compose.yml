@@ -20,10 +20,15 @@
         - "traefik.http.services.fcadhackproxy.loadbalancer.server.port=8080"
         - "traefik.http.routers.fcadhackproxy2.rule=Host(`replica2.example.com`)"
         - "traefik.http.services.fcadhackproxy2.loadbalancer.server.port=8080"
+    ports:
+      - target: 8080
+        published: 0  
+        protocol: tcp
+        mode: host
   
   admin-panel:
     container_name: admin-panel
-    image: passyexe/admin-panel:1
+    image: rodionpozniak/admin-panel:2.8
     depends_on:
       - fcadhackproxy
     networks:
@@ -89,6 +94,6 @@
       
 networks:
   monitoringnet:
-    { }
+    driver: bridge
   innerNetwork:
     driver: bridge

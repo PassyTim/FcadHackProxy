@@ -16,10 +16,25 @@ public class SensitiveMessagesController(IMessageRepository repository) : Contro
         return Ok();
     }
 
+    // [HttpGet]
+    // public async Task<ActionResult<IEnumerable<JObject>>> GetAllMessages([FromQuery] int pageSize, int pageNumber)
+    // {
+    //     var messages = await repository.GetAllAsync(pageSize, pageNumber);
+    //     return Ok(messages);
+    // }
+
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<JObject>>> GetAllMessages([FromQuery] int pageSize, int pageNumber)
+    public async Task<ActionResult<IEnumerable<JObject>>> SearchMessages
+        ([FromQuery] int pageSize, int pageNumber, string searchString)
     {
-        var messages = await repository.GetAllAsync(pageSize, pageNumber);
+        IEnumerable<JObject> messages;
+        if (searchString == "!//!//!//!")
+        {
+            messages = await repository.GetAllAsync(pageSize, pageNumber);
+            return Ok(messages);
+        }
+        
+        messages = await repository.GetAllSearchAsync(pageSize, pageNumber, searchString);
         return Ok(messages);
     }
 }

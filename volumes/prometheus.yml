@@ -1,17 +1,16 @@
 global:
   scrape_interval: 15s
   evaluation_interval: 15s
- 
+
 scrape_configs:
-   
   - job_name: "prometheus"
- 
-    # metrics_path defaults to '/metrics'
-    # scheme defaults to 'http'.
- 
     static_configs:
       - targets: ["localhost:9090"]
- 
-  - job_name: "netcoreapp"
-    static_configs:
-      - targets: ["fcadhackproxy:8080"]
+
+  - job_name: "fcadhackproxy"
+    dns_sd_configs:
+      - names:
+          - "fcadhackproxy"
+        type: A 
+        port: 8080  
+      

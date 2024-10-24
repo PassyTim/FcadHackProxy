@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using System.Collections;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using Newtonsoft.Json.Linq;
 
@@ -41,6 +42,31 @@ public class MessageRepository(
             .Limit(pageSize)
             .ToListAsync();
         
+        var jsonObjects = documents.Select(doc => JObject.Parse(doc.ToJson())).ToList();
+
+        return jsonObjects;
+    }
+
+    public async Task<IEnumerable<JObject>> GetAllSearchAsync(int pageSize, int pageNumber, string searchValue)
+    {
+        var collection = _mongoDatabase.GetCollection<BsonDocument>(_collectionName);
+
+        var filter = Builders<BsonDocument>.Filter.Or(
+            Builders<BsonDocument>.Filter.Regex("Имя", new BsonRegularExpression(searchValue, "i")),
+            Builders<BsonDocument>.Filter.Regex("Email", new BsonRegularExpression(searchValue, "i")),
+            Builders<BsonDocument>.Filter.Regex("Message", new BsonRegularExpression(searchValue, "i")),
+            Builders<BsonDocument>.Filter.Regex("Login", new BsonRegularExpression(searchValue, "i")),
+            Builders<BsonDocument>.Filter.Regex("Endpoint", new BsonRegularExpression(searchValue, "i")),
+            Builders<BsonDocument>.Filter.Regex("Номер телефона", new BsonRegularExpression(searchValue, "i")),
+            Builders<BsonDocument>.Filter.Regex("Имя", new BsonRegularExpression(searchValue, "i")),
+            Builders<BsonDocument>.Filter.Regex("Фамилия", new BsonRegularExpression(searchValue, "i"))
+        );
+
+        var documents = await collection.Find(filter)
+            .Skip((pageNumber - 1) * pageSize)
+            .Limit(pageSize)
+            .ToListAsync();
+
         var jsonObjects = documents.Select(doc => JObject.Parse(doc.ToJson())).ToList();
 
         return jsonObjects;
