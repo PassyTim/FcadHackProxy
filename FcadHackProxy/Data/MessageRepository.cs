@@ -2,6 +2,7 @@
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Newtonsoft.Json.Linq;
+using Prometheus;
 
 namespace FcadHackProxy.Data;
 
@@ -11,11 +12,13 @@ public class MessageRepository(
 {
     private readonly IMongoDatabase? _mongoDatabase = mongoDbService.Database;
     private readonly string _collectionName = "SensitiveMessages";
+    private static readonly Counter _requestCounter = Metrics.CreateCounter("saved_messages", "Total number of saved messages");
     public async Task SaveAsync(JObject jsonMessage)
     {
         var collection = _mongoDatabase.GetCollection<BsonDocument>(_collectionName);
         var document = BsonDocument.Parse(jsonMessage.ToString());
         await collection.InsertOneAsync(document);
+        _requestCounter.Inc();
     }
 
     public async Task<JObject> GetAsync(string id)

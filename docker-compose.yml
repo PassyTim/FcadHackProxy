@@ -28,7 +28,7 @@
   
   admin-panel:
     container_name: admin-panel
-    image: rodionpozniak/admin-panel:2.8
+    image: rodionpozniak/admin-panel:3.5
     depends_on:
       - fcadhackproxy
     networks:
