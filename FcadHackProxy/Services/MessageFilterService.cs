@@ -13,7 +13,7 @@ public class MessageFilterService(
     private bool _isMessageContainsSensitiveData;
     private bool _isSensitiveDataIsOnlyEmailAndLogin;
     private FilterSettings FilterSettings { get; set; } = filterSettings.CurrentSettings;
-    public async Task<JObject> ExecuteAsync(JObject jsonObject)
+    public async Task ExecuteAsync(JObject jsonObject)
     {
         var unfilteredJson = new JObject(jsonObject);
         var filteredMessage = await FilterMessage(jsonObject);
@@ -22,14 +22,10 @@ public class MessageFilterService(
         {
             await messageRepository.SaveAsync(unfilteredJson);
         } 
-        if (FilterSettings.BlockSensitiveMessages)
+        if (!FilterSettings.BlockSensitiveMessages)
         {
-            return filteredMessage;
+            sendRequestService.SendPostRequestAsync(filteredMessage);
         }
-
-        sendRequestService.SendPostRequestAsync(filteredMessage);
-        return filteredMessage;
-        // return new JObject();
     }
     
     private async Task<JObject> FilterMessage(JObject jsonMessage)

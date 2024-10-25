@@ -11,7 +11,7 @@ public class ReceiveMessageController(MessageFilterService filterService) : Cont
     [HttpPost]
     public async Task<ActionResult<JObject>> ReceiveMessage([FromBody] JObject message)
     {
-        var jsonObject = await filterService.ExecuteAsync(message);
-        return Ok(jsonObject);
+        await filterService.ExecuteAsync(message);
+        return Ok();
     }
 }
